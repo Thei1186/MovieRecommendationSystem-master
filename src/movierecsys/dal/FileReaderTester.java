@@ -39,6 +39,13 @@ public class FileReaderTester
             System.out.println(movie.getTitle());
         }
         System.out.println("Movie count: " + allMovies.size());
+        
+//        MovieDAO getNextAvailableMovieID = new MovieDAO();
+//        List<Movie> nextId = getNextAvailableMovieID.getAllMovies(); 
+//        for (Movie Id : nextId)
+//        {
+//            System.out.println(movie.getTitle));
+//        }
     }
         
 //        
