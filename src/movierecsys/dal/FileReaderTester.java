@@ -40,8 +40,17 @@ public class FileReaderTester
             System.out.println(movie.getTitle());
         }
         System.out.println("Movie count: " + allMovies.size());
+
         System.out.println(movieDao.getMovie(87).getTitle());
-    }
+    
+        
+//        MovieDAO getNextAvailableMovieID = new MovieDAO();
+//        List<Movie> nextId = getNextAvailableMovieID.getAllMovies(); 
+//        for (Movie Id : nextId)
+//        {
+//            System.out.println(movie.getTitle));
+//        }
+
         
 //        
 //        File ratings = new File("data/ratings.txt");   
@@ -71,4 +80,6 @@ public class FileReaderTester
 //            }
 //        }
 //    }
+
+    }
 }
