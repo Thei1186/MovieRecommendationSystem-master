@@ -101,7 +101,7 @@ public class MovieDAO
         }
         return new Movie(id, releaseYear, title);
     }
-    private int getNextAvailableMovieID() throws IOException
+    int getNextAvailableMovieID() throws IOException
     {
         int id = 0;
         List<Movie> allMovies = getAllMovies();
