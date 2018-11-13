@@ -21,6 +21,8 @@ public class Rating
     private final Movie movie;
     private final User user;
     private int rating;
+    private int movieId;
+    private int userId;
 
     /**
      * Constructs a new rating.
@@ -35,8 +37,13 @@ public class Rating
         this.movie = movie;
         this.user = user;
         this.rating = rating;
+//    }
+//    public Rating(int movieId, int userId, int rating)
+//    {
+//        this.movieId = movieId;
+//        this.userId = userId;
+//        this.rating = rating;
     }
-
     /**
      * Sets the rating to a new value. Only the constants of the Rating class
      * are allowed values.
@@ -57,7 +64,10 @@ public class Rating
     {
         return movie;
     }
-
+//    public int getMovie()
+//    {
+//        return movieId;
+//    }
     /**
      * Gets the rating user.
      *
@@ -67,6 +77,10 @@ public class Rating
     {
         return user;
     }
+//    public int getUser()
+//    {
+//        return userId;
+//    }
 
     /**
      * Gets the rating value.

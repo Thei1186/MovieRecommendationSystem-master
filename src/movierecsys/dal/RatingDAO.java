@@ -92,6 +92,7 @@ public class RatingDAO
         UserDAO userDao = new UserDAO();
         
         Rating rating = new Rating(movieDao.getMovie(movieId), userDao.getUser(userId), ratingValue);
+//        Rating rating = new Rating(movieId, userId, ratingValue);
         return rating;
     }
     /**
