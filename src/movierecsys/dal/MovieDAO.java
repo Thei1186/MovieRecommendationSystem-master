@@ -5,9 +5,15 @@
  */
 package movierecsys.dal;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import movierecsys.be.Movie;
@@ -28,21 +34,40 @@ public class MovieDAO
      */
     public List<Movie> getAllMovies() throws IOException
     {
-        File file = new File(SOURCE);
         List<Movie> allMovies = new ArrayList<>();
-        List<String> lines = Files.readAllLines(file.toPath());
-        for (String line : lines)
+        File file = new File(SOURCE);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
-            String[] columns = line.split(",");
-            int id = Integer.parseInt(columns[0]);
-            int year = Integer.parseInt(columns[1]);
-            String title = columns[2];
-            Movie movie = new Movie(id, year, title);
-            allMovies.add(movie);
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                if (!line.isEmpty())
+                {
+                    try
+                    {
+                        Movie mov = stringArrayToMovie(line);
+                        allMovies.add(mov);
+                    } catch (Exception ex)
+                    {
+                        //Do nothing we simply do not accept malformed lines of data.
+                        //In a perfect world you should at least log the incident.
+                    }
+                }
+            }
         }
-
         return allMovies;
+    }
+    private Movie stringArrayToMovie(String t)
+    {
+        String[] arrMovie = t.split(",");
 
+        int id = Integer.parseInt(arrMovie[0]);
+        int year = Integer.parseInt(arrMovie[1]);
+        String title = arrMovie[2];
+
+        Movie mov = new Movie(id, year, title);
+        return mov;
     }
 
     /**
@@ -53,10 +78,35 @@ public class MovieDAO
      * @return The object representation of the movie added to the persistence
      * storage.
      */
-    public Movie createMovie(int releaseYear, String title)
+    public Movie createMovie(int releaseYear, String title) throws IOException
     {
-        //TODO Create movie.
-        return null;
+        Path path = new File(SOURCE).toPath();
+        int id = -1;
+        try(BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.SYNC, StandardOpenOption.APPEND, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        {
+            id = getNextAvailableMovieID();
+            bw.newLine();
+            bw.write(id + "," + releaseYear + "," +title);
+        }
+        return new Movie(id, releaseYear, title);
+    }
+    private int getNextAvailableMovieID() throws IOException
+    {
+        int id = 0;
+        List<Movie> allMovies = getAllMovies();
+        for (int i = 0; i < allMovies.size(); i++)
+        {
+            
+            if (allMovies.get(i).getId()== id)
+            {
+                id = allMovies.get(i).getId();
+            }
+            id++;
+        }
+         int nextId = id + 1;
+        
+        return nextId;
+
     }
 
     /**
@@ -86,9 +136,32 @@ public class MovieDAO
      * @param id ID of the movie.
      * @return A Movie object.
      */
-    public Movie getMovie(int id)
+    public Movie getMovie(int id) throws FileNotFoundException, IOException
     {
-        //TODO Get one Movie
+        File file = new File(SOURCE);
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file)))
+        {
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                if (!line.isEmpty())
+                {
+                    try
+                    {
+                        Movie mov = stringArrayToMovie(line);
+                        if (mov.getId()==id)
+                        {
+                            return mov;
+                        }                
+                    } catch (Exception ex)
+                    {
+                        //Do nothing we simply do not accept malformed lines of data.
+                        //In a perfect world you should at least log the incident.
+                    }
+                }
+            }
+        }
         return null;
     }
 
