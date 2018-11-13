@@ -25,17 +25,19 @@ import movierecsys.be.Movie;
 public class MovieDAO
 {
 
-    private static final String SOURCE = "data/movie_titles.txt";
+    private static final String MOVIE_SOURCE = "data/movie_titles.txt";
 
     /**
      * Gets a list of all movies in the persistence storage.
      *
      * @return List of movies.
      */
-    public List<Movie> getAllMovies() throws IOException
+    public List<Movie> getAllMovies() throws FileNotFoundException, IOException
     {
         List<Movie> allMovies = new ArrayList<>();
-        File file = new File(SOURCE);
+
+        File file = new File(MOVIE_SOURCE);
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
@@ -58,6 +60,15 @@ public class MovieDAO
         }
         return allMovies;
     }
+
+    /**
+     * Reads a movie from a , s
+     *
+     * @param t
+     * @return
+     * @throws NumberFormatException
+     */
+
     private Movie stringArrayToMovie(String t)
     {
         String[] arrMovie = t.split(",");
@@ -80,7 +91,7 @@ public class MovieDAO
      */
     public Movie createMovie(int releaseYear, String title) throws IOException
     {
-        Path path = new File(SOURCE).toPath();
+        Path path = new File(MOVIE_SOURCE).toPath();
         int id = -1;
         try(BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.SYNC, StandardOpenOption.APPEND, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.READ))
         {
@@ -138,7 +149,7 @@ public class MovieDAO
      */
     public Movie getMovie(int id) throws FileNotFoundException, IOException
     {
-        File file = new File(SOURCE);
+        File file = new File(MOVIE_SOURCE);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
