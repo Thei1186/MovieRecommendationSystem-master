@@ -6,11 +6,16 @@
 package movierecsys.dal;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import movierecsys.be.Movie;
 import movierecsys.be.User;
@@ -102,9 +107,23 @@ public class UserDAO
      * Updates a user so the persistence storage reflects the given User object.
      * @param user The updated user.
      */
-    public void updateUser(User user)
+    public void updateUser(User user) throws IOException
     {
-        //TODO Update user.
+        File tmp = new File("data/tmp_users.txt");
+        List<User> allUsers = getAllUsers();
+        allUsers.removeIf((User t) -> t.getId() == user.getId());
+        allUsers.add(user);
+        Collections.sort(allUsers, (User o1, User o2) -> Integer.compare(o1.getId(), o2.getId()));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
+        {
+            for (User use : allUsers)
+            {
+                bw.write(use.getId()+ "," + use.getName());
+                bw.newLine();
+            }
+        }
+        Files.copy(tmp.toPath(), new File(USER_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.delete(tmp.toPath());
     }
     
 }

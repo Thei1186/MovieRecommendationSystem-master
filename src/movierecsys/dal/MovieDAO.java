@@ -10,11 +10,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import movierecsys.be.Movie;
 
@@ -93,28 +96,30 @@ public class MovieDAO
     {
         Path path = new File(MOVIE_SOURCE).toPath();
         int id = -1;
-        try(BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.SYNC, StandardOpenOption.APPEND, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.READ))
+        try (BufferedWriter bw = Files.newBufferedWriter(path, StandardOpenOption.SYNC, StandardOpenOption.APPEND, StandardOpenOption.WRITE))
         {
             id = getNextAvailableMovieID();
             bw.newLine();
-            bw.write(id + "," + releaseYear + "," +title);
+            bw.write(id + "," + releaseYear + "," + title);
         }
         return new Movie(id, releaseYear, title);
     }
     int getNextAvailableMovieID() throws IOException
     {
         int id = 0;
+        int counter = 1;
         List<Movie> allMovies = getAllMovies();
         for (int i = 0; i < allMovies.size(); i++)
         {
             
-            if (allMovies.get(i).getId()== id)
+            if (allMovies.get(i).getId()!= counter)
             {
-                id = allMovies.get(i).getId();
+                id = counter;
+                return id;
             }
-            id++;
+            counter++;
         }
-        int nextId = id + 1;
+        int nextId = counter + 1;
         
         return nextId;
 
@@ -127,9 +132,52 @@ public class MovieDAO
      */
     public void deleteMovie(Movie movie) throws IOException
     {
+        File tmp = new File("data/tmp_movies.txt");
         List<Movie> allMovies = getAllMovies();
-        allMovies.remove(movie);
+        allMovies.removeIf((Movie t) -> t.getId() == movie.getId());
+        Collections.sort(allMovies, (Movie o1, Movie o2) -> Integer.compare(o1.getId(), o2.getId()));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
+        {
+            for (Movie mov : allMovies)
+            {
+                bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
+                bw.newLine();
+            }
+        }
+        Files.copy(tmp.toPath(), new File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.delete(tmp.toPath());
+        /**
+         * this was the way I tried to do it, but it didn't work
+         * it would never go into my for loop
+        List<Movie> allMovies = getAllMovies();
+        try 
+        {
+            for (Movie mov : allMovies) 
+            {
+                if (movie.getId()==mov.getId())
+                {
+                    allMovies.remove(mov.getId());
+                }
+            }
+        } catch (Exception ex) 
+        {
+            System.out.println("error 1");
+        }
+
         
+
+        File tmp = new File("data/tmp_movies.txt");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
+        {
+            for (Movie allMovy : allMovies) 
+            {
+                bw.write(allMovy.getId() + "," + allMovy.getYear() + "," + allMovy.getTitle());
+                bw.newLine();
+            }
+        }
+        Files.copy(tmp.toPath(), new File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.delete(tmp.toPath());
+        */
     }
 
     /**
@@ -138,9 +186,23 @@ public class MovieDAO
      *
      * @param movie The updated movie.
      */
-    public void updateMovie(Movie movie)
+    public void updateMovie(Movie movie) throws IOException
     {
-        
+        File tmp = new File("data/tmp_movies.txt");
+        List<Movie> allMovies = getAllMovies();
+        allMovies.removeIf((Movie t) -> t.getId() == movie.getId());
+        allMovies.add(movie);
+        Collections.sort(allMovies, (Movie o1, Movie o2) -> Integer.compare(o1.getId(), o2.getId()));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
+        {
+            for (Movie mov : allMovies)
+            {
+                bw.write(mov.getId() + "," + mov.getYear() + "," + mov.getTitle());
+                bw.newLine();
+            }
+        }
+        Files.copy(tmp.toPath(), new File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        Files.delete(tmp.toPath());
     }
 
     /**
