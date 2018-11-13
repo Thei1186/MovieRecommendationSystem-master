@@ -114,7 +114,7 @@ public class MovieDAO
             }
             id++;
         }
-         int nextId = id + 1;
+        int nextId = id + 1;
         
         return nextId;
 
@@ -125,9 +125,11 @@ public class MovieDAO
      *
      * @param movie The movie to delete.
      */
-    public void deleteMovie(Movie movie)
+    public void deleteMovie(Movie movie) throws IOException
     {
-        //TODO Delete movie
+        List<Movie> allMovies = getAllMovies();
+        allMovies.remove(movie);
+        
     }
 
     /**
@@ -138,7 +140,7 @@ public class MovieDAO
      */
     public void updateMovie(Movie movie)
     {
-        //TODO Update movies
+        
     }
 
     /**
