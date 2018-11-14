@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 import movierecsys.be.Movie;
+import movierecsys.be.Rating;
+import movierecsys.be.User;
 
 /**
  *
@@ -32,6 +34,38 @@ public class FileReaderTester
      */
     public static void main(String[] args) throws IOException
     {
+        //movieDaoTester();
+        //userDaoTester();
+        ratingDaoTester();
+    }
+    public static void ratingDaoTester() throws IOException
+    {
+        RatingDAO ratingDao = new RatingDAO();
+        List<Rating> allRatings = ratingDao.getAllRatings();
+//        for (Rating rating : allRatings) 
+//        {
+//            System.out.println(rating.getRating() + "stars for " + rating.getMovie().getTitle());
+//        }
+        for (int i = 0; i < 10; i++) 
+        {
+            System.out.println(allRatings.get(i).getRating() + "stars for " + allRatings.get(i).getMovie().getTitle());
+        }
+        
+    }
+    public static void userDaoTester() throws IOException
+    {
+        UserDAO userDao = new UserDAO();
+        List<User> allUsers = userDao.getAllUsers();
+        for (User user : allUsers)
+        {
+            System.out.println(user.getName());
+        }
+        System.out.println("User count: " +allUsers.size());
+        System.out.println(userDao.getUser(79).getName());
+        userDao.updateUser(new User(1, "bo hans"));
+    }
+    public static void movieDaoTester() throws IOException
+    {
         MovieDAO movieDao = new MovieDAO();
         List<Movie> allMovies = movieDao.getAllMovies();
         for (Movie movie : allMovies)
@@ -39,6 +73,15 @@ public class FileReaderTester
             System.out.println(movie.getTitle());
         }
         System.out.println("Movie count: " + allMovies.size());
+
+        System.out.println(movieDao.getMovie(87).getTitle());
+        Movie movie1 = new Movie(1, 2018, "miav miav");
+        Movie movie2 = new Movie(2, 2018, "miav miav");
+        System.out.println(movieDao.getNextAvailableMovieID());
+        movieDao.updateMovie(movie1);
+        movieDao.deleteMovie(movie2);
+        movieDao.updateMovie(movieDao.createMovie(2001, "Hello"));
+    
         
 //        MovieDAO getNextAvailableMovieID = new MovieDAO();
 //        List<Movie> nextId = getNextAvailableMovieID.getAllMovies(); 
@@ -46,7 +89,7 @@ public class FileReaderTester
 //        {
 //            System.out.println(movie.getTitle));
 //        }
-    }
+
         
 //        
 //        File ratings = new File("data/ratings.txt");   
@@ -76,4 +119,6 @@ public class FileReaderTester
 //            }
 //        }
 //    }
+
+    }
 }

@@ -8,7 +8,11 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+<<<<<<< HEAD
     <jar href="MovieRecommendationSystem.jar" size="20447" download="eager" />
+=======
+    <jar href="MovieRecommendationSystem.jar" size="26143" download="eager" />
+>>>>>>> 9e234a0effdc01a866c8e11579f0659d33084520
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="MovieRecommendationSystem" >
     <param name="requiredFXVersion" value="8.0+"/>
