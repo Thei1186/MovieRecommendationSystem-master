@@ -8,6 +8,7 @@ package movierecsys.dal;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
@@ -40,24 +41,34 @@ public class FileReaderTester
     }
     public static void ratingDaoTester() throws IOException
     {
-        System.out.println("start");
+        String target = "data/user_ratings";
         RatingDAO ratingDao = new RatingDAO();
-        List<Rating> allRatings = ratingDao.getAllRatings();
-        System.out.println(allRatings.size());
-//        for (Rating rating : allRatings) 
-//        {
-//            System.out.println(rating.getRating() + "stars for " + rating.getMovie().getTitle());
-//        }        
-        for (int i = 0; i < 1000; i++) 
+//        List<Rating> allRatings = ratingDao.getAllRatings();
+
+        List<Rating> all = ratingDao.getAllRatings();
+        
+        try (RandomAccessFile raf = new RandomAccessFile(target, "rw")) 
         {
-            System.out.println(allRatings.get(i).getRating() + "stars for " + allRatings.get(i).getMovie().getTitle());
+            for (Rating rating : all) 
+            {   
+                raf.writeInt(rating.getMovie());
+                raf.writeInt(rating.getUser());
+                raf.writeInt(rating.getRating());
+                System.out.println(rating.getRating());
+            }
+        } catch (Exception e) {
+            
         }
-//        List<Rating> userRating = ratingDao.getRatings(new User(7, "Georgi Facello"));
-//        for (Rating rating : userRating)
+ 
+//        It worked,but this was what I used for the method that was too slow
+//        System.out.println("start");
+//        RatingDAO ratingDao = new RatingDAO();
+//        List<Rating> allRatings = ratingDao.getAllRatings();
+//        System.out.println(allRatings.size());
+//        for (int i = 0; i < 1000; i++) 
 //        {
-//            System.out.println(rating.getRating() + "stars for " + rating.getMovie().getTitle());
+//            System.out.println(allRatings.get(i).getRating() + "stars for " + allRatings.get(i).getMovie().getTitle());
 //        }
-        System.exit(0);
         
     }
     public static void userDaoTester() throws IOException
