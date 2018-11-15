@@ -3,11 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/FileReaderTester.java</file>
             <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/be/Rating.java</file>
             <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/test/movierecsys/bll/util/MovieRecommenderTest.java</file>
             <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/MovieDAO.java</file>
             <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/RatingDAO.java</file>
+=======
+            <file>file:/C:/Users/andreas/Documents/GitHub/GruppeArbejde/MovieRecommendationSystem-master/src/movierecsys/be/Rating.java</file>
+            <file>file:/C:/Users/andreas/Documents/GitHub/GruppeArbejde/MovieRecommendationSystem-master/src/movierecsys/dal/FileReaderTester.java</file>
+>>>>>>> 9eaa42ec2caa44f65a94d68213ddd6cd2507f0e7
         </group>
     </open-files>
 </project-private>

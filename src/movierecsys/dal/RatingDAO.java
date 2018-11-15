@@ -55,34 +55,41 @@ public class RatingDAO
      */
     public List<Rating> getAllRatings() throws FileNotFoundException, IOException
     {
+        /** det virkede, men det var meget langsomt
         List<Rating> allRatings = new ArrayList<>();
-
         File file = new File(RATING_SOURCE);
-
-
+        System.out.println("a");
+        int counter = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
             String line;
-            while ((line = reader.readLine()) != null)
+            while ((line = reader.readLine()) != null && counter <1000)
             {
+                System.out.println("b");
                 if (!line.isEmpty())
                 {
+                    System.out.println("c");
                     try
                     {
+                        System.out.println("d "+ counter);
                         Rating rat = stringArrayToRating(line);
                         allRatings.add(rat);
+                        counter++;
                     } catch (Exception ex)
                     {
+                        System.out.println("e");
                         //Do nothing we simply do not accept malformed lines of data.
                         //In a perfect world you should at least log the incident.
                     }
                 }
             }
         }
-        return allRatings;
+        return allRatings;*/
+        return null;
     }
     private Rating stringArrayToRating(String t) throws IOException
     {
+        /** det virkede men det var langsomt.
         String[] arrRating = t.split(",");
 
         int movieId = Integer.parseInt(arrRating[0]);
@@ -93,7 +100,8 @@ public class RatingDAO
         
         Rating rating = new Rating(movieDao.getMovie(movieId), userDao.getUser(userId), ratingValue);
 //        Rating rating = new Rating(movieId, userId, ratingValue);
-        return rating;
+        return rating;*/
+        return null;
     }
     /**
      * Get all ratings from a specific user.

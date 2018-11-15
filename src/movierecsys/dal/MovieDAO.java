@@ -35,12 +35,10 @@ public class MovieDAO
      *
      * @return List of movies.
      */
-    public List<Movie> getAllMovies() throws FileNotFoundException, IOException
+    public List<Movie> getAllMovies() throws IOException
     {
         List<Movie> allMovies = new ArrayList<>();
-
         File file = new File(MOVIE_SOURCE);
-
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
@@ -63,15 +61,6 @@ public class MovieDAO
         }
         return allMovies;
     }
-
-    /**
-     * Reads a movie from a , s
-     *
-     * @param t
-     * @return
-     * @throws NumberFormatException
-     */
-
     private Movie stringArrayToMovie(String t)
     {
         String[] arrMovie = t.split(",");

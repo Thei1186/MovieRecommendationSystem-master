@@ -40,16 +40,24 @@ public class FileReaderTester
     }
     public static void ratingDaoTester() throws IOException
     {
+        System.out.println("start");
         RatingDAO ratingDao = new RatingDAO();
         List<Rating> allRatings = ratingDao.getAllRatings();
+        System.out.println(allRatings.size());
 //        for (Rating rating : allRatings) 
 //        {
 //            System.out.println(rating.getRating() + "stars for " + rating.getMovie().getTitle());
-//        }
-        for (int i = 0; i < 10; i++) 
+//        }        
+        for (int i = 0; i < 1000; i++) 
         {
             System.out.println(allRatings.get(i).getRating() + "stars for " + allRatings.get(i).getMovie().getTitle());
         }
+//        List<Rating> userRating = ratingDao.getRatings(new User(7, "Georgi Facello"));
+//        for (Rating rating : userRating)
+//        {
+//            System.out.println(rating.getRating() + "stars for " + rating.getMovie().getTitle());
+//        }
+        System.exit(0);
         
     }
     public static void userDaoTester() throws IOException
