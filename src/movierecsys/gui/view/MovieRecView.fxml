@@ -29,7 +29,7 @@
    <center>
       <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="txtMovieSearcjh" promptText="search movies" />
+            <TextField fx:id="txtMovieSearcjh" onKeyReleased="#handleSearch" promptText="search movies" />
             <ListView fx:id="lstMovies" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>

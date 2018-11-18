@@ -228,5 +228,19 @@ public class MovieDAO
         }
         return null;
     }
+    public List<Movie> searchMovies(String query) throws IOException
+    {
+        List<Movie> allMovies = getAllMovies();
+        List<Movie> searchedMovies = new ArrayList<>();
+       
+        for (Movie allMovy : allMovies) 
+        {
+            if (allMovy.getTitle().toLowerCase().contains(query.toLowerCase()))
+            {
+                searchedMovies.add(allMovy);
+            }
+        }
+        return searchedMovies;
+    }
 
 }

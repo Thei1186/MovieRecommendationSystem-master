@@ -48,7 +48,14 @@ public class MRSManager implements MRSLogicFacade {
     @Override
     public List<Movie> searchMovies(String query)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try
+        {
+            return movieDAO.searchMovies(query);
+        } catch (IOException ex)
+        {
+//            Logger.getLogger(MRSManager.class.getName()).log(Level.SEVERE, null, ex); You could log an exception
+            return null;
+        }
     }
 
     @Override

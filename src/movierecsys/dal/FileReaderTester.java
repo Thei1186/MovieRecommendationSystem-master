@@ -37,7 +37,8 @@ public class FileReaderTester
     {
         //movieDaoTester();
         //userDaoTester();
-        ratingDaoTester();
+        //ratingDaoTester();
+        
     }
     public static void ratingDaoTester() throws IOException
     {
@@ -59,6 +60,14 @@ public class FileReaderTester
         } catch (Exception e) {
             
         }
+       
+        User me = new User(7,"Georgi Facello");
+        List<Rating> ratingsByUser = ratingDao.getRatings(me);
+        for (Rating rating : ratingsByUser) 
+        {
+            System.out.println(rating.getUser());
+        }
+        System.out.println(ratingsByUser.size());
  
 //        It worked,but this was what I used for the method that was too slow
 //        System.out.println("start");
@@ -100,7 +109,11 @@ public class FileReaderTester
         movieDao.updateMovie(movie1);
         movieDao.deleteMovie(movie2);
         movieDao.updateMovie(movieDao.createMovie(2001, "Hello"));
-    
+        List<Movie> searchedMovies = movieDao.searchMovies("hello");
+        for (Movie searchedMovy : searchedMovies) 
+        {
+            System.out.println(searchedMovy.getTitle());
+        }
         
 //        MovieDAO getNextAvailableMovieID = new MovieDAO();
 //        List<Movie> nextId = getNextAvailableMovieID.getAllMovies(); 

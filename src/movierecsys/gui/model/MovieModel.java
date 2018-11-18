@@ -50,5 +50,11 @@ public class MovieModel
         logiclayer.deleteMovie(movie);
         movies.remove(movie);
     }
+    public ObservableList<Movie> getSearchedMovies(String query)
+    {
+        movies.clear();
+        movies.addAll(logiclayer.searchMovies(query));
+        return movies;
+    }
     
 }
