@@ -58,7 +58,7 @@ public class MovieRecController implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        //lstMovies.setItems(movieModel.getMovies());
+        lstMovies.setItems(movieModel.getMovies());
         
     }
 

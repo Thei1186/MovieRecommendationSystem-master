@@ -3,11 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/FileReaderTester.java</file>
-            <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/gui/model/MovieModel.java</file>
-            <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/RatingDAO.java</file>
-            <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/dal/MovieDAO.java</file>
-            <file>file:/C:/Users/Andreas%20Svendsen/Documents/GitHub/MovieRecommendationSystem-master/src/movierecsys/gui/controller/MovieRecController.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/MovieDBDAO.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/RatingDAO.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/DbConnectionProvider.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/UserDAO.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IUserRepository.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MovieDAO.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IMovieRepository.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IRatingRepository.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/FileReaderTester.java</file>
         </group>
     </open-files>
 </project-private>

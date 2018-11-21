@@ -5,6 +5,7 @@
  */
 package movierecsys.dal;
 
+import movierecsys.dal.MRSinterfaces.IUserRepository;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,19 +25,22 @@ import movierecsys.be.User;
  *
  * @author pgn
  */
-public class UserDAO
+public class UserDAO implements IUserRepository
 {
+
     private static final String USER_SOURCE = "data/users.txt";
+
     /**
      * Gets a list of all known users.
+     *
      * @return List of users.
      */
+    @Override
     public List<User> getAllUsers() throws FileNotFoundException, IOException
     {
         List<User> allUsers = new ArrayList<>();
 
         File file = new File(USER_SOURCE);
-
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
@@ -59,6 +63,7 @@ public class UserDAO
         }
         return allUsers;
     }
+
     private User stringArrayToUser(String t)
     {
         String[] arrUser = t.split(",");
@@ -69,11 +74,14 @@ public class UserDAO
         User user = new User(id, name);
         return user;
     }
+
     /**
      * Gets a single User by its ID.
+     *
      * @param id The ID of the user.
      * @return The User with the ID.
      */
+    @Override
     public User getUser(int id) throws FileNotFoundException, IOException
     {
         File file = new File(USER_SOURCE);
@@ -88,10 +96,10 @@ public class UserDAO
                     try
                     {
                         User user = stringArrayToUser(line);
-                        if (user.getId()==id)
+                        if (user.getId() == id)
                         {
                             return user;
-                        }                
+                        }
                     } catch (Exception ex)
                     {
                         //Do nothing we simply do not accept malformed lines of data.
@@ -102,11 +110,13 @@ public class UserDAO
         }
         return null;
     }
-    
+
     /**
      * Updates a user so the persistence storage reflects the given User object.
+     *
      * @param user The updated user.
      */
+    @Override
     public void updateUser(User user) throws IOException
     {
         File tmp = new File("data/tmp_users.txt");
@@ -118,12 +128,12 @@ public class UserDAO
         {
             for (User use : allUsers)
             {
-                bw.write(use.getId()+ "," + use.getName());
+                bw.write(use.getId() + "," + use.getName());
                 bw.newLine();
             }
         }
         Files.copy(tmp.toPath(), new File(USER_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.delete(tmp.toPath());
     }
-    
+
 }

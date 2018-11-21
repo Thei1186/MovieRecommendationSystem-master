@@ -5,6 +5,7 @@
  */
 package movierecsys.dal;
 
+import movierecsys.dal.MRSinterfaces.IRatingRepository;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,7 +32,7 @@ import movierecsys.be.Movie;
  *
  * @author pgn
  */
-public class RatingDAO
+public class RatingDAO implements IRatingRepository
 {
 
     private static final String RATING_SOURCE = "data/user_ratings";
@@ -44,20 +45,21 @@ public class RatingDAO
      *
      * @param rating the rating to persist.
      */
+    @Override
     public void createRating(Rating rating) throws FileNotFoundException, IOException
     {
         //TODO Rate movie
         List<Rating> allRatings = getAllRatings();
         allRatings.add(rating);
-        
+
         Collections.sort(allRatings, (Rating o1, Rating o2) ->
         {
             int movieCompare = Integer.compare(o1.getMovie(), o2.getMovie());
             return movieCompare == 0 ? Integer.compare(o1.getUser(), o2.getUser()) : movieCompare;
         });
-        
+
         byte[] all = Files.readAllBytes(new File(RATING_SOURCE).toPath()); //I get all records as binary data!
-        
+
 //        try (RandomAccessFile raf = new RandomAccessFile(RATING_SOURCE, "rw"))
 //        {
 //
@@ -71,37 +73,39 @@ public class RatingDAO
     }
 
     /**
-     * Updates the rating to reflect the given object. Assumes that the source file is order by movie ID, then User ID..
+     * Updates the rating to reflect the given object. Assumes that the source
+     * file is order by movie ID, then User ID..
      *
      * @param rating The updated rating to persist.
      * @throws java.io.IOException
      */
-    public void updateRating1(Rating rating) throws IOException
-    {
-        File tmp = new File("data/tmp_ratings.txt");
-        List<Rating> allRatings = getAllRatings();
-        allRatings.removeIf((Rating t) -> t.getMovie() == rating.getMovie() && t.getUser() == rating.getUser());
-        allRatings.add(rating);
-        Collections.sort(allRatings, (Rating o1, Rating o2) ->
-        {
-            int movieCompare = Integer.compare(o1.getMovie(), o2.getMovie());
-            return movieCompare == 0 ? Integer.compare(o1.getUser(), o2.getUser()) : movieCompare;
-        });
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
-        {
-            for (Rating rat : allRatings)
-            {
-                bw.write(rat.getMovie() + "," + rat.getUser()+ "," + rat.getRating());
-                bw.newLine();
-                
-            }
-        }
-        Files.copy(tmp.toPath(), new File(R_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.delete(tmp.toPath());
-        //make it into a file where it is in bytes, I don't remember how to do it atm.
-        
-        
-    }
+//    public void updateRating1(Rating rating) throws IOException
+//    {
+//        File tmp = new File("data/tmp_ratings.txt");
+//        List<Rating> allRatings = getAllRatings();
+//        allRatings.removeIf((Rating t) -> t.getMovie() == rating.getMovie() && t.getUser() == rating.getUser());
+//        allRatings.add(rating);
+//        Collections.sort(allRatings, (Rating o1, Rating o2) ->
+//        {
+//            int movieCompare = Integer.compare(o1.getMovie(), o2.getMovie());
+//            return movieCompare == 0 ? Integer.compare(o1.getUser(), o2.getUser()) : movieCompare;
+//        });
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
+//        {
+//            for (Rating rat : allRatings)
+//            {
+//                bw.write(rat.getMovie() + "," + rat.getUser()+ "," + rat.getRating());
+//                bw.newLine();
+//                
+//            }
+//        }
+//        Files.copy(tmp.toPath(), new File(R_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+//        Files.delete(tmp.toPath());
+//        //make it into a file where it is in bytes, I don't remember how to do it atm.
+//        
+//        
+//    }
+    @Override
     public void updateRating(Rating rating) throws IOException
     {
         try (RandomAccessFile raf = new RandomAccessFile(RATING_SOURCE, "rw"))
@@ -175,10 +179,11 @@ public class RatingDAO
      *
      * @param rating
      */
+    @Override
     public void deleteRating(Rating rating) throws FileNotFoundException, IOException
     {
         //TODO Delete rating
-       
+
     }
 
     /**
@@ -186,6 +191,7 @@ public class RatingDAO
      *
      * @return List of all ratings.
      */
+    @Override
     public List<Rating> getAllRatings() throws IOException
     {
         List<Rating> allRatings = new ArrayList<>();
@@ -217,9 +223,9 @@ public class RatingDAO
         //TODO Get user ratings.
         List<Rating> allRatings = getAllRatings();
         List<Rating> ratingsByUser = new ArrayList<>();
-        for (Rating allRating : allRatings) 
+        for (Rating allRating : allRatings)
         {
-            if (allRating.getUser()==user.getId())
+            if (allRating.getUser() == user.getId())
             {
                 ratingsByUser.add(allRating);
             }
@@ -236,14 +242,6 @@ public class RatingDAO
         return new Rating(movId, userId, rating);
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
 //    private static final String RATING_SOURCE = "data/ratings.txt";
 //    /**
 //     * Persists the given rating.
@@ -360,5 +358,4 @@ public class RatingDAO
 //        }
 //        return null;
 //    }
-    
 }
