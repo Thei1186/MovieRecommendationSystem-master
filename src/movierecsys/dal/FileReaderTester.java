@@ -5,12 +5,18 @@
  */
 package movierecsys.dal;
 
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +26,7 @@ import java.util.stream.Stream;
 import movierecsys.be.Movie;
 import movierecsys.be.Rating;
 import movierecsys.be.User;
+import movierecsys.dal.Db.DbConnectionProvider;
 
 /**
  *
@@ -30,16 +37,21 @@ public class FileReaderTester
 
     /**
      * Example method. This is the code I used to create the users.txt files.
+     *
      * @param args
-     * @throws IOException 
+     * @throws IOException
      */
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) throws IOException, SQLException
     {
+        // mitigateRatings();
+        // mitigateUsers();
+        // mitigateMovie();
         //movieDaoTester();
         //userDaoTester();
         //ratingDaoTester();
-        
+
     }
+
     public static void ratingDaoTester() throws IOException
     {
         String target = "data/user_ratings";
@@ -47,28 +59,29 @@ public class FileReaderTester
 //        List<Rating> allRatings = ratingDao.getAllRatings();
 
         List<Rating> all = ratingDao.getAllRatings();
-        
-        try (RandomAccessFile raf = new RandomAccessFile(target, "rw")) 
+
+        try (RandomAccessFile raf = new RandomAccessFile(target, "rw"))
         {
-            for (Rating rating : all) 
-            {   
+            for (Rating rating : all)
+            {
                 raf.writeInt(rating.getMovie());
                 raf.writeInt(rating.getUser());
                 raf.writeInt(rating.getRating());
                 System.out.println(rating.getRating());
             }
-        } catch (Exception e) {
-            
+        } catch (Exception e)
+        {
+
         }
-       
-        User me = new User(7,"Georgi Facello");
+
+        User me = new User(7, "Georgi Facello");
         List<Rating> ratingsByUser = ratingDao.getRatings(me);
-        for (Rating rating : ratingsByUser) 
+        for (Rating rating : ratingsByUser)
         {
             System.out.println(rating.getUser());
         }
         System.out.println(ratingsByUser.size());
- 
+
 //        It worked,but this was what I used for the method that was too slow
 //        System.out.println("start");
 //        RatingDAO ratingDao = new RatingDAO();
@@ -78,8 +91,117 @@ public class FileReaderTester
 //        {
 //            System.out.println(allRatings.get(i).getRating() + "stars for " + allRatings.get(i).getMovie().getTitle());
 //        }
-        
     }
+
+    public static void mitigateRatings() throws IOException
+    {
+        DbConnectionProvider ds = new DbConnectionProvider();
+
+        RatingDAO raDao = new RatingDAO();
+        List<Rating> ratings = raDao.getAllRatings();
+
+        try (Connection con = ds.getConnection())
+        {
+            Statement statement = con.createStatement();
+            int counter = 0;
+            for (Rating rating : ratings)
+            {
+                String sql = "INSERT INTO [Ratings] (Movieid,Userid,Rating) VALUES("
+                        + rating.getMovie() + ","
+                        + rating.getUser() + ",'"
+                        + rating.getRating() + "');";
+                statement.addBatch(sql);
+                counter++;
+                if (counter % 10000 == 0)
+                {
+                    statement.executeBatch();
+                    System.out.println("Added " + counter + " ratings.");
+                }
+            }
+            if (counter % 10000 != 0)
+            {
+                statement.executeBatch();
+                System.out.println("Added " + counter + " ratings.");
+            }
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void mitigateUsers() throws IOException
+    {
+        DbConnectionProvider ds = new DbConnectionProvider();
+
+        UserDAO usDAO = new UserDAO();
+        List<User> users = usDAO.getAllUsers();
+
+        try (Connection con = ds.getConnection())
+        {
+            Statement statement = con.createStatement();
+            int counter = 0;
+            for (User user : users)
+            {
+                String sql = "INSERT INTO [User] (id,name) VALUES("
+                        + user.getId() + ",'"
+                        + user.getName() + "');";
+                statement.addBatch(sql);
+                counter++;
+                if (counter % 1000 == 0)
+                {
+                    statement.executeBatch();
+                    System.out.println("Added 1000 users.");
+                }
+            }
+            if (counter % 1000 != 0)
+            {
+                statement.executeBatch();
+                System.out.println("Added final batch of users.");
+            }
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void mitigateMovie() throws SQLException, IOException
+    {
+        DbConnectionProvider ds = new DbConnectionProvider();
+
+        MovieDAO mvDao = new MovieDAO();
+        List<Movie> movies = mvDao.getAllMovies();
+
+        try (Connection con = ds.getConnection())
+        {
+            Statement statement = con.createStatement();
+            int counter = 0;
+            for (Movie movie : movies)
+            {
+                String sq1 = "INSERT INTO Movie (id, year, title) VALUES("
+                        + movie.getId() + ","
+                        + movie.getYear() + ",'"
+                        + movie.getTitle().replace("'", "") + "');";
+                statement.addBatch(sq1);
+                counter++;
+                if (counter % 1000 == 0)
+                {
+                    statement.executeBatch();
+                    System.out.println("Added  " + counter + " movies");
+                }
+            }
+            if (counter % 1000 != 0)
+            {
+                statement.executeBatch();
+                System.out.println("Added  " + counter + " movies");
+            }
+
+        } catch (SQLException ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
+
     public static void userDaoTester() throws IOException
     {
         UserDAO userDao = new UserDAO();
@@ -88,10 +210,11 @@ public class FileReaderTester
         {
             System.out.println(user.getName());
         }
-        System.out.println("User count: " +allUsers.size());
+        System.out.println("User count: " + allUsers.size());
         System.out.println(userDao.getUser(79).getName());
         userDao.updateUser(new User(1, "bo hans"));
     }
+
     public static void movieDaoTester() throws IOException
     {
         MovieDAO movieDao = new MovieDAO();
@@ -110,19 +233,17 @@ public class FileReaderTester
         movieDao.deleteMovie(movie2);
         movieDao.updateMovie(movieDao.createMovie(2001, "Hello"));
         List<Movie> searchedMovies = movieDao.searchMovies("hello");
-        for (Movie searchedMovy : searchedMovies) 
+        for (Movie searchedMovy : searchedMovies)
         {
             System.out.println(searchedMovy.getTitle());
         }
-        
+
 //        MovieDAO getNextAvailableMovieID = new MovieDAO();
 //        List<Movie> nextId = getNextAvailableMovieID.getAllMovies(); 
 //        for (Movie Id : nextId)
 //        {
 //            System.out.println(movie.getTitle));
 //        }
-
-        
 //        
 //        File ratings = new File("data/ratings.txt");   
 //        Set<Integer> uniqueIds = new HashSet<>();
@@ -151,6 +272,5 @@ public class FileReaderTester
 //            }
 //        }
 //    }
-
     }
 }
