@@ -9,6 +9,7 @@ import movierecsys.dal.MRSinterfaces.IMovieRepository;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,31 +23,81 @@ import movierecsys.be.Movie;
  */
 public class MovieDBDAO implements IMovieRepository
 {
+    DbConnectionProvider ds;
+    public MovieDBDAO() throws IOException
+    {
+        ds = new DbConnectionProvider(); 
+    }
 
     @Override
     public Movie createMovie(int releaseYear, String title) throws IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sq1 = "INSERT INTO [Movie] (year, title)VALUES(?,?);";
+        try (Connection con = ds.getConnection())
+        {
+            PreparedStatement st = con.prepareStatement(sq1, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, releaseYear);
+            st.setString(2, title);
+            int rowsAffected = st.executeUpdate();
+      
+            ResultSet rs = st.getGeneratedKeys();
+            int id = 0;
+            if (rs.next())
+            {
+               id = rs.getInt(1);
+            }
+            Movie movie = new Movie(id, releaseYear, title);
+            return movie;
+        
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+            return null;
     }
 
+    public int getNextAvailableId() throws IOException
+    {
+     
+     int lastId = 0;
+        try (Connection con = ds.getConnection())
+        {
+          
+            Statement statement = con.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Movie");
+            while (rs.next())
+            {
+                
+                lastId = rs.getInt("id");
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+       return lastId +1;
+        
+    }
+    
     @Override
     public void deleteMovie(Movie movie) throws IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        
+        
+      
     }
 
     @Override
     public List<Movie> getAllMovies() throws IOException
     {
-        DbConnectionProvider ds = new DbConnectionProvider();
-       
+     
         List<Movie> movies = new ArrayList<>();
-        
+
         try (Connection con = ds.getConnection())
         {
             Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Employee ");
-            while(rs.next())
+            ResultSet rs = statement.executeQuery("SELECT * FROM Movie ");
+            while (rs.next())
             {
                 int id = rs.getInt("id");
                 int year = rs.getInt("year");
@@ -66,7 +117,8 @@ public class MovieDBDAO implements IMovieRepository
     @Override
     public Movie getMovie(int id) throws FileNotFoundException, IOException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    return null;
     }
 
     @Override

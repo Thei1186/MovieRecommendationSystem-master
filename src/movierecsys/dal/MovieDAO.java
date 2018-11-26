@@ -63,6 +63,7 @@ public class MovieDAO implements IMovieRepository
         }
         return allMovies;
     }
+
     private Movie stringArrayToMovie(String t)
     {
         String[] arrMovie = t.split(",");
@@ -96,6 +97,7 @@ public class MovieDAO implements IMovieRepository
         }
         return new Movie(id, releaseYear, title);
     }
+
     int getNextAvailableMovieID() throws IOException
     {
         int id = 0;
@@ -103,8 +105,8 @@ public class MovieDAO implements IMovieRepository
         List<Movie> allMovies = getAllMovies();
         for (int i = 0; i < allMovies.size(); i++)
         {
-            
-            if (allMovies.get(i).getId()!= counter)
+
+            if (allMovies.get(i).getId() != counter)
             {
                 id = counter;
                 return id;
@@ -112,7 +114,7 @@ public class MovieDAO implements IMovieRepository
             counter++;
         }
         int nextId = counter + 1;
-        
+
         return nextId;
 
     }
@@ -140,37 +142,21 @@ public class MovieDAO implements IMovieRepository
         Files.copy(tmp.toPath(), new File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
         Files.delete(tmp.toPath());
         /**
-         * this was the way I tried to do it, but it didn't work
-         * it would never go into my for loop
-        List<Movie> allMovies = getAllMovies();
-        try 
-        {
-            for (Movie mov : allMovies) 
-            {
-                if (movie.getId()==mov.getId())
-                {
-                    allMovies.remove(mov.getId());
-                }
-            }
-        } catch (Exception ex) 
-        {
-            System.out.println("error 1");
-        }
-
-        
-
-        File tmp = new File("data/tmp_movies.txt");
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tmp)))
-        {
-            for (Movie allMovy : allMovies) 
-            {
-                bw.write(allMovy.getId() + "," + allMovy.getYear() + "," + allMovy.getTitle());
-                bw.newLine();
-            }
-        }
-        Files.copy(tmp.toPath(), new File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        Files.delete(tmp.toPath());
-        */
+         * this was the way I tried to do it, but it didn't work it would never
+         * go into my for loop List<Movie> allMovies = getAllMovies(); try { for
+         * (Movie mov : allMovies) { if (movie.getId()==mov.getId()) {
+         * allMovies.remove(mov.getId()); } } } catch (Exception ex) {
+         * System.out.println("error 1"); }
+         *
+         *
+         *
+         * File tmp = new File("data/tmp_movies.txt"); try (BufferedWriter bw =
+         * new BufferedWriter(new FileWriter(tmp))) { for (Movie allMovy :
+         * allMovies) { bw.write(allMovy.getId() + "," + allMovy.getYear() + ","
+         * + allMovy.getTitle()); bw.newLine(); } } Files.copy(tmp.toPath(), new
+         * File(MOVIE_SOURCE).toPath(), StandardCopyOption.REPLACE_EXISTING);
+         * Files.delete(tmp.toPath());
+         */
     }
 
     /**
@@ -220,10 +206,10 @@ public class MovieDAO implements IMovieRepository
                     try
                     {
                         Movie mov = stringArrayToMovie(line);
-                        if (mov.getId()==id)
+                        if (mov.getId() == id)
                         {
                             return mov;
-                        }                
+                        }
                     } catch (Exception ex)
                     {
                         //Do nothing we simply do not accept malformed lines of data.
@@ -234,13 +220,14 @@ public class MovieDAO implements IMovieRepository
         }
         return null;
     }
+
     @Override
     public List<Movie> searchMovies(String query) throws IOException
     {
         List<Movie> allMovies = getAllMovies();
         List<Movie> searchedMovies = new ArrayList<>();
-       
-        for (Movie allMovy : allMovies) 
+
+        for (Movie allMovy : allMovies)
         {
             if (allMovy.getTitle().toLowerCase().contains(query.toLowerCase()))
             {

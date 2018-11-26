@@ -5,7 +5,6 @@
  */
 package movierecsys.dal.Db;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -27,16 +26,15 @@ public class UserDBDAO implements IUserRepository
     @Override
     public List<User> getAllUsers() throws FileNotFoundException, IOException
     {
-       DbConnectionProvider ds = new DbConnectionProvider();
-        
+        DbConnectionProvider ds = new DbConnectionProvider();
 
         List<User> users = new ArrayList<>();
-        
+
         try (Connection con = ds.getConnection())
         {
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery("SELECT * FROM [User] ");
-            while(rs.next())
+            while (rs.next())
             {
                 int id = rs.getInt("id");
                 int year = rs.getInt("year");
@@ -52,7 +50,6 @@ public class UserDBDAO implements IUserRepository
         }
         return users;
     }
-    
 
     @Override
     public User getUser(int id) throws FileNotFoundException, IOException
@@ -65,5 +62,5 @@ public class UserDBDAO implements IUserRepository
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

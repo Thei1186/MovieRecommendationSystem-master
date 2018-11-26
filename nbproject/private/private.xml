@@ -4,13 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/MovieDBDAO.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/RatingDAO.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/DbConnectionProvider.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/UserDAO.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IUserRepository.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/RatingDBDAO.java</file>
             <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MovieDAO.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IMovieRepository.java</file>
-            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/MRSinterfaces/IRatingRepository.java</file>
+            <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/Db/UserDBDAO.java</file>
             <file>file:/D:/Program%20Files/Git/MovieRecommendationSystem-master/src/movierecsys/dal/FileReaderTester.java</file>
         </group>
     </open-files>

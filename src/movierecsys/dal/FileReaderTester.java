@@ -27,6 +27,7 @@ import movierecsys.be.Movie;
 import movierecsys.be.Rating;
 import movierecsys.be.User;
 import movierecsys.dal.Db.DbConnectionProvider;
+import movierecsys.dal.Db.MovieDBDAO;
 
 /**
  *
@@ -45,11 +46,11 @@ public class FileReaderTester
     {
         // mitigateRatings();
         // mitigateUsers();
-        // mitigateMovie();
+//         mitigateMovie();
         //movieDaoTester();
         //userDaoTester();
         //ratingDaoTester();
-
+        dbMovieTester();
     }
 
     public static void ratingDaoTester() throws IOException
@@ -200,6 +201,13 @@ public class FileReaderTester
             ex.printStackTrace();
         }
 
+    }
+
+    public static void dbMovieTester() throws IOException
+    {
+        MovieDBDAO mDbDao = new MovieDBDAO();
+        mDbDao.createMovie(2000, "Epoch");
+        System.out.println("Did we get an id?" );
     }
 
     public static void userDaoTester() throws IOException

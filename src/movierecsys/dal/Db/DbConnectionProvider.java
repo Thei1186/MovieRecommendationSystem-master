@@ -18,9 +18,11 @@ import java.util.Properties;
  */
 public class DbConnectionProvider
 {
+
     private static final String PROP_FILE = "database_settings.txt";
     private final SQLServerDataSource ds;
-        public DbConnectionProvider() throws IOException
+
+    public DbConnectionProvider() throws IOException
     {
         Properties databaseProperties = new Properties();
         databaseProperties.load(new FileInputStream(PROP_FILE));
@@ -29,9 +31,10 @@ public class DbConnectionProvider
         ds.setDatabaseName(databaseProperties.getProperty("Database"));
         ds.setUser(databaseProperties.getProperty("User"));
         ds.setPassword(databaseProperties.getProperty("Password"));
-}
- public Connection getConnection() throws SQLServerException
+    }
+
+    public Connection getConnection() throws SQLServerException
     {
         return ds.getConnection();
-}       
+    }
 }
