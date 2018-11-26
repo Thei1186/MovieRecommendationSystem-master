@@ -56,33 +56,21 @@ public class MovieDBDAO implements IMovieRepository
             return null;
     }
 
-    public int getNextAvailableId() throws IOException
-    {
-     
-     int lastId = 0;
-        try (Connection con = ds.getConnection())
-        {
-          
-            Statement statement = con.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT * FROM Movie");
-            while (rs.next())
-            {
-                
-                lastId = rs.getInt("id");
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-       return lastId +1;
-        
-    }
+   
     
     @Override
     public void deleteMovie(Movie movie) throws IOException
     {
-        
-        
+    String sq1 = "DELETE FROM Movie WHERE id = ?";
+        try(Connection con = ds.getConnection()) 
+        {
+            PreparedStatement pstmt = con.prepareStatement(sq1);
+            
+            pstmt.setInt(1, movie.getId());
+            pstmt.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
       
     }
@@ -132,5 +120,26 @@ public class MovieDBDAO implements IMovieRepository
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+//
+//     public int getNextAvailableId() throws IOException
+//    {
+//     
+//     int lastId = 0;
+//        try (Connection con = ds.getConnection())
+//        {
+//          
+//            Statement statement = con.createStatement();
+//            ResultSet rs = statement.executeQuery("SELECT * FROM Movie");
+//            while (rs.next())
+//            {
+//                
+//                lastId = rs.getInt("id");
+//            }
+//        } catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//       return lastId +1;
+//        
+//    }
 }
